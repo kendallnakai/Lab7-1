@@ -84,31 +84,72 @@
       // The main difference from fetchOne() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
-        // TODO
+        // fetch method accepts url of api as param which returns a promise
+        fetch(document.getElementById("endpoint").value, { method: "GET" })
+        // if promise is returned, function in here is executed 
+        .then(response => response.json())
+        .then(data => document.getElementById("output").innerHTML = JSON.stringify(data)) 
+        // if promise is rejected, this will handle the reject
+        .catch(err => document.getElementById("output").innerHTML = err);
       }
-
+      
       // This function should fetch one entry from the given endpoint.
       // From the 4 CRUD actions, this is the READ action, and uses the GET http method.
       // The main difference from fetchAll() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
-        // TODO
+        let windowPrompt = window.prompt("ID");
+        // fetch method accepts url of api as param which returns a promise
+        fetch(document.getElementById("endpoint").value + "/" + windowPrompt, { method: "GET" })
+        // if promise is returned, function in here is executed 
+        .then(response => response.json())
+        .then(data => document.getElementById("output").innerHTML = JSON.stringify(data)) 
+        // if promise is rejected, this will handle the reject
+        .catch(err => document.getElementById("output").innerHTML = err);
       }
 
       // This function should use fetch to create one entry in the given endpoint.
       // From the 4 CRUD actions, this is the CREATE action, and uses the POST http method.
       // The main difference from updateRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function createRecord() {
-        // TODO
+      function createRecord(e) {
+        let values =  {
+          title: document.getElementById("title").value, 
+          author: document.getElementById("author").value
+        };
+        // fetch method accepts url of api as param which returns a promise
+        fetch(document.getElementById("endpoint").value, { 
+          method: "POST",
+          headers: {"Content-type": "application/json"},
+          body: JSON.stringify(values)
+        })
+        // if promise is returned, function in here is executed 
+        .then(response => response.json())
+        .then(data => document.getElementById("output").innerHTML = JSON.stringify(data)) 
+        // if promise is rejected, this will handle the reject
+        .catch(err => document.getElementById("output").innerHTML = err);
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.
       // The main difference from createRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function updateRecord() {
-        // TODO
+      function updateRecord(e) {
+        let values =  {
+          title: document.getElementById("title").value, 
+          author: document.getElementById("author").value
+        };
+        // fetch method accepts url of api as param which returns a promise
+        fetch(document.getElementById("endpoint").value + "/" + document.getElementById('recordID').value, { 
+          method: "PUT",
+          headers: {"Content-type": "application/json"},
+          body: JSON.stringify(values)
+        })
+        // if promise is returned, function in here is executed 
+        .then(response => response.json())
+        .then(data => document.getElementById("output").innerHTML = JSON.stringify(data)) 
+        // if promise is rejected, this will handle the reject
+        .catch(err => document.getElementById("output").innerHTML = err);
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -117,7 +158,22 @@
       // request; check the writeup to view the URL pattern for get one and delete. THERE IS NO 
       // delete all, only delete one.
       function deleteRecord() {
-        // TODO
+        let windowPrompt = window.prompt("ID");
+        let values =  {
+          title: document.getElementById("title").value, 
+          author: document.getElementById("author").value
+        };
+        // fetch method accepts url of api as param which returns a promise
+        fetch(document.getElementById("endpoint").value + "/" + windowPrompt, { 
+          method: "DELETE",
+          headers: {"Content-type": "application/json"},
+          body: JSON.stringify(values)
+        })
+        // if promise is returned, function in here is executed 
+        .then(response => response.json())
+        .then(data => document.getElementById("output").innerHTML = JSON.stringify(data)) 
+        // if promise is rejected, this will handle the reject
+        .catch(err => document.getElementById("output").innerHTML = err);
       }
 
       window.addEventListener('DOMContentLoaded', () => {
@@ -130,18 +186,28 @@
 
             switch (command) {
               case "List All":
+                document.getElementById("recordForm").style.display = "none";
+                document.getElementById("recordIDcontainer").style.display = "none";
                 fetchAll();
                 break;
               case "List One":
+                document.getElementById("recordForm").style.display = "none";
+                document.getElementById("recordIDcontainer").style.display = "none";
                 fetchOne();
                 break;
               case "Create":
                 createRecord('show');
+                document.getElementById("recordForm").style.display = "inherit";
+                document.getElementById("recordIDcontainer").style.display = "inherit";
                 break;
               case "Update":
                 updateRecord('show');
+                document.getElementById("recordForm").style.display = "inherit";
+                document.getElementById("recordIDcontainer").style.display = "inherit";
                 break;
               case "Delete":
+                document.getElementById("recordForm").style.display = "none";
+                document.getElementById("recordIDcontainer").style.display = "none";
                 deleteRecord();
                 break;
               default:
